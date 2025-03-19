@@ -18,6 +18,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.ServerList;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -194,7 +195,7 @@ public class ServerScreen extends Screen {
                 var e = new ScrollListWidget.ScrollListEntry() {
                 };
                 if (server.featured()) {
-                    e.addDrawable((a, b, c, d) -> a.drawTexture(Identifier.of("blockatlas", "textures/gui/featuredtext.png"), 54 + textRenderer.getWidth(server.server_name()), 5, 0, 0, 51, 7, 51, 7));
+                    e.addDrawable((a, b, c, d) -> a.drawTexture(RenderLayer::getGuiTextured, Identifier.of("blockatlas", "textures/gui/featuredtext.png"), 54 + textRenderer.getWidth(server.server_name()), 5, 0, 0, 51, 7, 51, 7));
                 }
                 e.addDrawable(new NonCenterTextWidget(iconsize + 4, 4, Text.literal(server.server_name()), textRenderer));
                 e.addDrawable(new TextureWidget(new LazyUrlTexture(server.favicon_url()), 2, 2, iconsize, iconsize));
