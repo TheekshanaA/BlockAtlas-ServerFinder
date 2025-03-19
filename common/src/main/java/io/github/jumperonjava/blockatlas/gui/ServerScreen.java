@@ -277,7 +277,7 @@ public class ServerScreen extends Screen {
         @Override
         public void clearElements(boolean resetScroll) {
             if(resetScroll)
-                target.serverListWidget.setScrollAmount(0);
+                target.serverListWidget.setScrollY(0);
             target.serverList.clear();
             target.updateServerList();
         }

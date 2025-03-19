@@ -37,7 +37,7 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
     }
 
     @Override
-    protected int getDefaultScrollbarX() {
+    protected int getScrollbarX() {
         return getX();
     }
 
@@ -47,9 +47,9 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
         int j = this.getX() + this.width / 2;
         int k = j - i;
         int l = j + i;
-        int m = MathHelper.floor(y - (double)this.getY()) - this.headerHeight + (int)this.getScrollAmount() - 4;
+        int m = MathHelper.floor(y - (double)this.getY()) - this.headerHeight + (int)this.getScrollY() - 4;
         int n = m / this.itemHeight;
-        return (x < (double)this.getDefaultScrollbarX() || x > (double)this.getDefaultScrollbarX() +1) && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.children().get(n) : null;
+        return (x < (double)this.getScrollbarX() || x > (double)this.getScrollbarX() +1) && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.children().get(n) : null;
     }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
