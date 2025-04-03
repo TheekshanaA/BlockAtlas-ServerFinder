@@ -1,12 +1,8 @@
 package io.github.jumperonjava.blockatlas.gui.elements;
 
-import io.github.jumperonjava.blockatlas.api.Server;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 
 public class NonCenterTextWidget implements Drawable {

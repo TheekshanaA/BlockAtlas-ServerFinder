@@ -5,8 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -15,27 +13,26 @@ import net.minecraft.util.Util;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class PingIcon implements Drawable, Element {
     private final String address;
-    static final Identifier INCOMPATIBLE_TEXTURE = new Identifier("server_list/incompatible");
-    static final Identifier UNREACHABLE_TEXTURE = new Identifier("server_list/unreachable");
-    static final Identifier PING_1_TEXTURE = new Identifier("server_list/ping_1");
-    static final Identifier PING_2_TEXTURE = new Identifier("server_list/ping_2");
-    static final Identifier PING_3_TEXTURE = new Identifier("server_list/ping_3");
-    static final Identifier PING_4_TEXTURE = new Identifier("server_list/ping_4");
-    static final Identifier PING_5_TEXTURE = new Identifier("server_list/ping_5");
-    static final Identifier PINGING_1_TEXTURE = new Identifier("server_list/pinging_1");
-    static final Identifier PINGING_2_TEXTURE = new Identifier("server_list/pinging_2");
-    static final Identifier PINGING_3_TEXTURE = new Identifier("server_list/pinging_3");
-    static final Identifier PINGING_4_TEXTURE = new Identifier("server_list/pinging_4");
-    static final Identifier PINGING_5_TEXTURE = new Identifier("server_list/pinging_5");
+    static final Identifier INCOMPATIBLE_TEXTURE = Identifier.of("server_list/incompatible");
+    static final Identifier UNREACHABLE_TEXTURE = Identifier.of("server_list/unreachable");
+    static final Identifier PING_1_TEXTURE = Identifier.of("server_list/ping_1");
+    static final Identifier PING_2_TEXTURE = Identifier.of("server_list/ping_2");
+    static final Identifier PING_3_TEXTURE = Identifier.of("server_list/ping_3");
+    static final Identifier PING_4_TEXTURE = Identifier.of("server_list/ping_4");
+    static final Identifier PING_5_TEXTURE = Identifier.of("server_list/ping_5");
+    static final Identifier PINGING_1_TEXTURE = Identifier.of("server_list/pinging_1");
+    static final Identifier PINGING_2_TEXTURE = Identifier.of("server_list/pinging_2");
+    static final Identifier PINGING_3_TEXTURE = Identifier.of("server_list/pinging_3");
+    static final Identifier PINGING_4_TEXTURE = Identifier.of("server_list/pinging_4");
+    static final Identifier PINGING_5_TEXTURE = Identifier.of("server_list/pinging_5");
 
     static final Text INCOMPATIBLE_TEXT = Text.translatable("multiplayer.status.incompatible");
     static final Text NO_CONNECTION_TEXT = Text.translatable("multiplayer.status.no_connection");
     static final Text PINGING_TEXT = Text.translatable("multiplayer.status.pinging");
-    static final Identifier ICONS_TEXTURE = new Identifier("textures/gui/icons.png");
+    static final Identifier ICONS_TEXTURE = Identifier.of("textures/gui/icons.png");
     private final int x,y;
     private final MinecraftClient client;
 

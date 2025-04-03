@@ -18,14 +18,13 @@ loom{
         mixinConfig "BlockAtlas.mixins.json"
     }
     accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-    }
 }
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -41,28 +40,21 @@ processResources {
 
 shadowJar {
     exclude "fabric.mod.json"
-    mustRunAfter  ":fabric:compileJava"
-    mustRunAfter  ":fabric:processResources"
+    exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set("dev-shadow")
 }
 
 remapJar {
-    dependsOn ":fabric:shadowJar"
-    archiveFileName = "${archivesBaseName}-${project.version}-${rootProject.minecraft_version}-forge.jar"
-    buildDir = "${rootProject.rootDir}/.finalbuilds"
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set(null)
-}
-remapSourcesJar{
-    mustRunAfter ":fabric:sourcesJar"
+    atAccessWideners.add("blockatlas.accesswidener")
+    archiveFileName = "${archivesBaseName}-${project.version}-${rootProject.minecraft_version}-forge.jar"
 }
 
 jar {
-    mustRunAfter ":fabric:compileJava"
-    mustRunAfter  ":fabric:processResources"
     archiveClassifier.set("dev")
 }
 
@@ -70,6 +62,12 @@ sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }
 
 components.java {

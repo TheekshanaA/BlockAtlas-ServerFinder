@@ -42,7 +42,7 @@ remapJar {
     archiveFileName = "${archivesBaseName}-${project.version}-${rootProject.minecraft_version}-fabric.jar"
     //archivePath += "../../../../finalbuild"
 
-    buildDir = "${rootProject.rootDir}/.finalbuilds"
+    //buildDir = "${rootProject.rootDir}/.finalbuilds"
     injectAccessWidener = true
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar

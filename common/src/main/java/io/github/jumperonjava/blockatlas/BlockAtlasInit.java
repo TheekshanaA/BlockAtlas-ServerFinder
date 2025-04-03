@@ -1,6 +1,5 @@
 package io.github.jumperonjava.blockatlas;
 
-import io.github.jumperonjava.blockatlas.api.EmptyHandler;
 import io.github.jumperonjava.blockatlas.api.ServerApi;
 import io.github.jumperonjava.blockatlas.api.blockatlas.BlockAtlasApi;
 import io.github.jumperonjava.blockatlas.api.motd.PingWithCache;
@@ -16,32 +15,37 @@ import org.slf4j.LoggerFactory;
 
 public class BlockAtlasInit{
     public static ServerApi api;
+
     public static final MinecraftClient client = MinecraftClient.getInstance();
     public static final Logger LOGGER = LoggerFactory.getLogger("BlockAtlas");
-    public static void disconnect(){
+
+    public static void disconnect() {
         boolean bl = client.isInSingleplayer();
         boolean bl2 = false;
+
         if(client.world!=null)
-        client.world.disconnect();
-        if (bl) {
+            client.world.disconnect();
+
+        if (bl)
             client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
-        } else {
+         else
             client.disconnect();
-        }
+
 
         TitleScreen titleScreen = new TitleScreen();
-        if (bl) {
+
+        if (bl)
             client.setScreen(titleScreen);
-        } else if (bl2) {
+        else if (bl2)
             client.setScreen(new RealmsMainScreen(titleScreen));
-        } else {
+        else
             client.setScreen(new MultiplayerScreen(titleScreen));
-        }
+
 
     }
     public static void initApi(){
-        if(api!=null)
-            return;
+        if(api!=null) return;
+
         api = new BlockAtlasApi();
         new PingWithCache();
     }

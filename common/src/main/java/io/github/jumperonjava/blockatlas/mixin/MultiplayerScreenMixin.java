@@ -1,8 +1,8 @@
 package io.github.jumperonjava.blockatlas.mixin;
 
 import io.github.jumperonjava.blockatlas.BlockAtlasInit;
-import io.github.jumperonjava.blockatlas.util.ServerInfoExt;
 import io.github.jumperonjava.blockatlas.gui.ServerScreen;
+import io.github.jumperonjava.blockatlas.util.ServerInfoExt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -12,7 +12,6 @@ import net.minecraft.client.gui.widget.AxisGridWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.ServerList;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.Final;
@@ -31,8 +30,6 @@ import java.util.TimerTask;
 
 @Mixin(MultiplayerScreen.class)
 public abstract class MultiplayerScreenMixin extends Screen {
-    @Shadow private ServerInfo selectedEntry;
-    @Shadow private ServerList serverList;
     @Shadow protected MultiplayerServerListWidget serverListWidget;
     @Shadow private ButtonWidget buttonEdit;
     @Mutable
@@ -78,7 +75,7 @@ public abstract class MultiplayerScreenMixin extends Screen {
                     ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry) entry).getServer();
                     var shouldVote = serverInfo != null && ((ServerInfoExt) serverInfo).getVoteLink() != null;
                     if(shouldVote)
-                    Util.getOperatingSystem().open(new URL(((ServerInfoExt) serverInfo).getVoteLink()));
+                        Util.getOperatingSystem().open(new URL(((ServerInfoExt) serverInfo).getVoteLink()).toURI());
                     new Timer().schedule(new TimerTask(){
 
                         @Override

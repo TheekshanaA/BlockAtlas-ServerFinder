@@ -6,12 +6,12 @@ import io.github.jumperonjava.blockatlas.api.ListHandler;
 import io.github.jumperonjava.blockatlas.api.Server;
 import io.github.jumperonjava.blockatlas.api.ServerApi;
 import io.github.jumperonjava.blockatlas.api.Tag;
-import io.github.jumperonjava.blockatlas.util.ServerInfoExt;
 import io.github.jumperonjava.blockatlas.gui.elements.*;
+import io.github.jumperonjava.blockatlas.util.ServerInfoExt;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.AxisGridWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -42,9 +42,9 @@ public class ServerScreen extends Screen {
     private Runnable loadMore;
     private Runnable tagCallback;
     private ScrollListWidget serverListWidget = new ScrollListWidget(client,100,height-16,8,8,22);
-    private java.util.List<Server> serverList = new ArrayList<>();
+    private final java.util.List<Server> serverList = new ArrayList<>();
     private ScrollListWidget tagListWidget;
-    private java.util.List<Tag> tagList = new ArrayList<>();
+    private final java.util.List<Tag> tagList = new ArrayList<>();
     private Runnable activateButtons;
     private Runnable deactivateButtons;
 
@@ -54,7 +54,7 @@ public class ServerScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context,mouseX,mouseY,delta);
+        //renderBackground(context,mouseX,mouseY,delta);
         super.render(context, mouseX, mouseY, delta);
     }
 
@@ -66,10 +66,7 @@ public class ServerScreen extends Screen {
     }
     public void init(){
 
-        if(350+100+8>width-10)
-            smallmode=true;
-        else
-            smallmode=false;
+        smallmode= 350 + 100 + 8 > width - 10;
         if(smallmode){
             SERVER_LIST_SIZE = 305;
             TAG_LIST_SIZE = 70;
@@ -89,7 +86,7 @@ public class ServerScreen extends Screen {
         tagListWidget = new ScrollListWidget(client,TAG_LIST_SIZE,height-bottom,centerpos,top,22);
         //tagCallback.run();
         updateTagList();
-        if(tagListWidget.children().size()>0)
+        if(!tagListWidget.children().isEmpty())
             tagListWidget.children().get(0).setMeActive();
         api.setTagHandler(tagHandler);
         addDrawable(new ScrollListWidget(client,width,height-bottom,0,top,54));
@@ -109,7 +106,7 @@ public class ServerScreen extends Screen {
         var addServer = new ButtonWidget.Builder(Text.translatable("selectServer.add"),(b)->{addServer(selectedServer);}).dimensions(0,0,buttonSize,20).build();
         var vote = new ButtonWidget.Builder(Text.translatable("blockatlas.vote"),(b)->{
             try{
-                Util.getOperatingSystem().open(new URL(selectedServer.getVoteLink()));
+                Util.getOperatingSystem().open(new URL(selectedServer.getVoteLink()).toURI());
             }
             catch (Exception e){e.printStackTrace();}
             scheduleUnfocus(b);
@@ -117,7 +114,7 @@ public class ServerScreen extends Screen {
         }).dimensions(0,0,buttonSize,20).build();
         var addServerToList = new ButtonWidget.Builder(Text.translatable("blockatlas.addToList"),(b)->{
             try{
-                Util.getOperatingSystem().open(new URL("https://blockatlas.net/add-server"));
+                Util.getOperatingSystem().open(new URL("https://blockatlas.net/add-server").toURI());
             }
             catch (Exception e){e.printStackTrace();}
             scheduleUnfocus(b);
@@ -171,7 +168,8 @@ public class ServerScreen extends Screen {
     private void connect(Server selectedServer) {
         BlockAtlasInit.disconnect();
         var t = (selectedServer.server_ip()+":25565").split(":");
-        ConnectScreen.connect(this,client,new ServerAddress(t[0], Integer.parseInt(t[1])),new ServerInfo("",selectedServer.server_ip(), ServerInfo.ServerType.OTHER),true);
+        if (client == null) return;
+        ConnectScreen.connect(this,client,new ServerAddress(t[0], Integer.parseInt(t[1])),new ServerInfo("",selectedServer.server_ip(), ServerInfo.ServerType.OTHER),true, null);
         selectedServer.onConnected();
     }
 
@@ -196,7 +194,7 @@ public class ServerScreen extends Screen {
                 var e = new ScrollListWidget.ScrollListEntry() {
                 };
                 if (server.featured()) {
-                    e.addDrawable((a, b, c, d) -> a.drawTexture(new Identifier("blockatlas", "textures/gui/featuredtext.png"), 54 + textRenderer.getWidth(server.server_name()), 5, 0, 0, 51, 7, 51, 7));
+                    e.addDrawable((a, b, c, d) -> a.drawTexture(Identifier.of("blockatlas", "textures/gui/featuredtext.png"), 54 + textRenderer.getWidth(server.server_name()), 5, 0, 0, 51, 7, 51, 7));
                 }
                 e.addDrawable(new NonCenterTextWidget(iconsize + 4, 4, Text.literal(server.server_name()), textRenderer));
                 e.addDrawable(new TextureWidget(new LazyUrlTexture(server.favicon_url()), 2, 2, iconsize, iconsize));
@@ -231,7 +229,7 @@ public class ServerScreen extends Screen {
                     return false;
                 }
             };
-            if(serverListWidget.children().size()==0)
+            if(serverListWidget.children().isEmpty())
                 return;
             var loadmore = e.addDrawableChild(new ButtonWidget.Builder(Text.translatable("blockatlas.loadmore"),(b)-> loadMore.run())
                     .dimensions(SERVER_LIST_SIZE/2-50,14,100,20).build(),false);
@@ -288,6 +286,7 @@ public class ServerScreen extends Screen {
             var e = new ScrollListWidget.ScrollListEntry();
             var lw = target.serverListWidget;
             e.addDrawable((context, mouseX, mouseY, delta) -> {
+                if (target.client == null) return;
                 context.drawCenteredTextWithShadow(target.client.textRenderer,Text.translatable("blockatlas.servererror"),lw.getRowWidth()/2,4,0xFFFF8888);
                 context.drawCenteredTextWithShadow(target.client.textRenderer,Text.literal(error.getMessage()),lw.getRowWidth()/2,14,0xFFFF8888);
             });
@@ -323,7 +322,8 @@ public class ServerScreen extends Screen {
 
         }
     }
-    public void close(){
+    public void close() {
+        if (client == null) return;
         client.setScreen(new MultiplayerScreen(new TitleScreen()));
     }
 }

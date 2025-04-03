@@ -18,48 +18,52 @@ import java.util.function.Consumer;
  * Scroll list widget for general use.
  */
 public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWidget.ScrollListEntry> {
+
     public ScrollListWidget(MinecraftClient client, int width, int height, int x, int y, int itemHeight) {
-        super(client,width+6,height,y,height,itemHeight);
-        setLeftPos(x-6);
+        super(client,width + 6, height - 26, y, itemHeight);
+        setX(x - 6);
     }
+
     @Override
     public int getRowWidth() {
         return this.width;
     }
+
     public int addEntry(ScrollListEntry entry){
         entry.activationConsumer = this::setSelectedEntry;
         entry.isHoveredFunction = this::isMouseOver;
         entry.currentX+=6;
         return super.addEntry(entry);
     }
+
     @Override
-    protected int getScrollbarPositionX() {
-        return left;
+    protected int getDefaultScrollbarX() {
+        return getX();
     }
+
+    @Override
     protected ScrollListEntry getEntryAtPosition(double x, double y) {
         int i = this.getRowWidth() / 2;
-        int j = this.left + this.width / 2;
+        int j = this.getX() + this.width / 2;
         int k = j - i;
         int l = j + i;
-        int m = MathHelper.floor(y - (double)this.top) - this.headerHeight + (int)this.getScrollAmount() - 4;
+        int m = MathHelper.floor(y - (double)this.getY()) - this.headerHeight + (int)this.getScrollAmount() - 4;
         int n = m / this.itemHeight;
-        return (x < (double)this.getScrollbarPositionX() || x > (double)this.getScrollbarPositionX() +1) && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.children().get(n) : null;
+        return (x < (double)this.getDefaultScrollbarX() || x > (double)this.getDefaultScrollbarX() +1) && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.children().get(n) : null;
     }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         return super.mouseClicked(mouseX, mouseY, button);
     }
-    private ScrollListEntry selectedEntry=new ScrollListEntry();
+
+    private ScrollListEntry selectedEntry = new ScrollListEntry();
+
     public void setSelectedEntry(ScrollListEntry listEntry) {
         selectedEntry.setSelected(false);
         listEntry.setSelected(true);
         selectedEntry=listEntry;
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-    }
     /**
      * Scroll list entry. Out of box does nothing but using addDrawableChild method you can add widgets for custom behaviour.
      */
@@ -69,13 +73,15 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
         private boolean isSelected = false;
         private Consumer<ScrollListEntry> activationConsumer;
         private BiFunction<Integer,Integer,Boolean> isHoveredFunction;
-        private List<Element> deactivate = Lists.newArrayList();
+        private final List<Element> deactivate = Lists.newArrayList();
 
         @Override
         public Text getNarration() {
             return Text.empty();
         }
+
         int currentX, currentY;
+
         private void setSelected(boolean selected) {
             this.isSelected = selected;
             for (var d : deactivate) {
@@ -84,6 +90,7 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
                 }
             }
         }
+
         @Override
         public void render(DrawContext context,
                            int index,
@@ -143,10 +150,12 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
                 this.deactivate.add(drawableElement);
             return drawableElement;
         }
+
         public <T extends Drawable> T addDrawable(T drawable){
             this.drawables.add(drawable);
             return drawable;
         }
+
         protected boolean selectable(){
             return true;
         }

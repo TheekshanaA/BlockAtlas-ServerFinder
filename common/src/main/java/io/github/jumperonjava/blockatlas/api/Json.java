@@ -2,15 +2,14 @@ package io.github.jumperonjava.blockatlas.api;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
@@ -18,9 +17,9 @@ import java.util.function.Consumer;
 public class Json {
     public static final Gson GSON;
     static {
-        GSON = new GsonBuilder().registerTypeAdapter(Text.class,new TextTypeAdapter()).setPrettyPrinting().create();
+        GSON = new GsonBuilder().registerTypeAdapter(Text.class, new TextTypeAdapter()).setPrettyPrinting().create();
     }
-    private static ThreadPoolExecutor GET_JSON_ASYNC = new ScheduledThreadPoolExecutor(4, (new ThreadFactoryBuilder()).setNameFormat("Json getter pool %d").setDaemon(true).build());;
+    private static final ThreadPoolExecutor GET_JSON_ASYNC = new ScheduledThreadPoolExecutor(4, (new ThreadFactoryBuilder()).setNameFormat("Json getter pool %d").setDaemon(true).build());;
     public static void getFromUrl(String urlString, Consumer<String> onSuccess,Runnable onFail)
     {
         GET_JSON_ASYNC.submit(()-> {
