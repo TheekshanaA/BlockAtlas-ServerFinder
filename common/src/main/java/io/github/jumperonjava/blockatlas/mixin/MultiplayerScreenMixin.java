@@ -45,14 +45,6 @@ public abstract class MultiplayerScreenMixin extends Screen {
     @Inject(method = "connect(Lnet/minecraft/client/network/ServerInfo;)V",at = @At("HEAD"))
     public void disconnectFromServer(ServerInfo entry, CallbackInfo ci){
         var preq = ((ServerInfoExt)entry).getPostReq();
-        if(preq!=null){
-            var list = preq.split("&");
-            try{
-                var c = Class.forName(list[0]);
-                c.getMethod(list[1], String.class).invoke(null,list[2]);
-            }
-            catch (Exception ignored){throw new RuntimeException(ignored);}
-        }
         this.parent = new TitleScreen();
         BlockAtlasInit.disconnect();
     }
@@ -96,7 +88,7 @@ public abstract class MultiplayerScreenMixin extends Screen {
         MultiplayerServerListWidget.Entry entry = this.serverListWidget.getSelectedOrNull();
         if (entry instanceof MultiplayerServerListWidget.ServerEntry) {
             ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry) entry).getServer();
-            var shouldVote = serverInfo != null && ((ServerInfoExt)serverInfo).getVoteLink() != null;
+            boolean shouldVote = serverInfo != null && ((ServerInfoExt)serverInfo).getVoteLink() != null;
             voteButton.setY(shouldVote?height-30:1000000);
             buttonEdit.setY(!shouldVote?height-30:1000000);
 
