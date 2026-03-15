@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -123,12 +124,17 @@ public class BlockAtlasServer implements Server {
     }
     public static void sendPostRequest(String arguments){
         POST_ASYNC.submit(()->{
+            HttpURLConnection connection = null;
             try {
                 var args = arguments.split("@");
+                if (args.length < 2) {
+                    LOGGER.warn("Invalid post request arguments: {}", arguments);
+                    return;
+                }
                 String url = "https://blockatlas.net/scripts/record_copy_count.php";
-                String body = "server_id=" + args[0] + "&method=" + args[1];
+                String body = "server_id=" + URLEncoder.encode(args[0], StandardCharsets.UTF_8) + "&method=" + URLEncoder.encode(args[1], StandardCharsets.UTF_8);
                 LOGGER.info("Sent record copy count to blockatlas api {}",body);
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 connection.setDoOutput(true);
@@ -144,6 +150,10 @@ public class BlockAtlasServer implements Server {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
             }
         });
     }
