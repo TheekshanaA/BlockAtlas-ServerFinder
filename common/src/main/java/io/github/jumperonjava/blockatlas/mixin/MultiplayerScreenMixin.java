@@ -47,11 +47,13 @@ public abstract class MultiplayerScreenMixin extends Screen {
         var preq = ((ServerInfoExt)entry).getPostReq();
         if(preq!=null){
             var list = preq.split("&");
-            try{
-                var c = Class.forName(list[0]);
-                c.getMethod(list[1], String.class).invoke(null,list[2]);
+            if (list.length >= 3) {
+                try{
+                    var c = Class.forName(list[0]);
+                    c.getMethod(list[1], String.class).invoke(null,list[2]);
+                }
+                catch (Exception ignored){throw new RuntimeException(ignored);}
             }
-            catch (Exception ignored){throw new RuntimeException(ignored);}
         }
         this.parent = new TitleScreen();
         BlockAtlasInit.disconnect();
