@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -104,7 +104,7 @@ public class PingIcon implements Drawable, Element {
                 list2 = Collections.emptyList();
         }
 
-        context.drawGuiTexture(RenderLayer::getGuiTextured, identifier, x - 10, y, 10, 8);
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier, x - 10, y, 10, 8);
         //context.fill(x,y,x-10,y+8,0xFFFFFF00);
         if(isMouseOver(mouseX,mouseY)){
             var pingtext = Text.literal(String.valueOf(server == null ? "Failed to get ping" : server.ping+" ms"));

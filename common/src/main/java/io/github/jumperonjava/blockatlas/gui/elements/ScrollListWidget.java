@@ -100,8 +100,8 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
                            int mouseX, int mouseY,
                            boolean hovered,
                            float delta) {
-            context.getMatrices().push();
-            context.getMatrices().translate(x+6, y, 0);
+            context.getMatrices().pushMatrix();
+            context.getMatrices().translate(x+6, y);
             entryWidth-=6;
             entryHeight+=2;
             entryWidth-=4;
@@ -118,7 +118,7 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
                 currentX = x + 6;
                 currentY = y;
             }
-            context.getMatrices().pop();
+            context.getMatrices().popMatrix();
         }
 
         @Override

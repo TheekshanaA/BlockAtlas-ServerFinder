@@ -21,23 +21,20 @@ public class BlockAtlasInit{
 
     public static void disconnect() {
         boolean bl = client.isInSingleplayer();
-        boolean bl2 = false;
 
         if(client.world!=null)
-            client.world.disconnect();
+            client.world.disconnect(Text.translatable("menu.disconnect"));
 
         if (bl)
-            client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
+            client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")), false);
          else
-            client.disconnect();
+            client.disconnect(new MessageScreen(Text.translatable("menu.disconnect")), false);
 
 
         TitleScreen titleScreen = new TitleScreen();
 
         if (bl)
             client.setScreen(titleScreen);
-        else if (bl2)
-            client.setScreen(new RealmsMainScreen(titleScreen));
         else
             client.setScreen(new MultiplayerScreen(titleScreen));
 
