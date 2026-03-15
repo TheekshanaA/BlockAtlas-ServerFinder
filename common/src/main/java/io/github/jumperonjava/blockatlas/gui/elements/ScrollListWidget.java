@@ -41,20 +41,7 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
         return getX();
     }
 
-    @Override
-    protected ScrollListEntry getEntryAtPosition(double x, double y) {
-        int i = this.getRowWidth() / 2;
-        int j = this.getX() + this.width / 2;
-        int k = j - i;
-        int l = j + i;
-        int m = MathHelper.floor(y - (double)this.getY()) - this.headerHeight + (int)this.getScrollY() - 4;
-        int n = m / this.itemHeight;
-        return (x < (double)this.getScrollbarX() || x > (double)this.getScrollbarX() +1) && x >= (double)k && x <= (double)l && n >= 0 && m >= 0 && n < this.getEntryCount() ? this.children().get(n) : null;
-    }
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
+
 
     private ScrollListEntry selectedEntry = new ScrollListEntry();
 
@@ -93,42 +80,33 @@ public class ScrollListWidget extends AlwaysSelectedEntryListWidget<ScrollListWi
 
         @Override
         public void render(DrawContext context,
-                           int index,
-                           int y, int x,
-                           int entryWidth,
-                           int entryHeight,
                            int mouseX, int mouseY,
                            boolean hovered,
                            float delta) {
+            int x = getX();
+            int y = getY();
+            int entryWidth = getWidth() - 6;
+            int entryHeight = getHeight() + 2;
+            entryWidth -= 4;
+
             context.getMatrices().pushMatrix();
-            context.getMatrices().translate(x+6, y);
-            entryWidth-=6;
-            entryHeight+=2;
-            entryWidth-=4;
+            context.getMatrices().translate(x + 6, y);
             if(isSelected){
                 context.fill(-1,-1,entryWidth+1,entryHeight+1,0xFFAAAAAA);
                 context.fill(0,0,entryWidth,entryHeight,0xFF000000);
             }
             for (var d : drawables) {
-                if(!isHoveredFunction.apply(mouseX,mouseY)){
-                    mouseX+=100000;
-                    mouseY+=100000;
+                int mx = mouseX;
+                int my = mouseY;
+                if(isHoveredFunction != null && !isHoveredFunction.apply(mouseX,mouseY)){
+                    mx += 100000;
+                    my += 100000;
                 }
-                d.render(context, mouseX - x - 6, mouseY - y, delta);
+                d.render(context, mx - x - 6, my - y, delta);
                 currentX = x + 6;
                 currentY = y;
             }
             context.getMatrices().popMatrix();
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (!isMouseOver(mouseX, mouseY))
-                return false;
-            for (var c : children) {
-                c.mouseClicked((mouseX) - (currentX), mouseY - currentY, button);
-            }
-            return false;
         }
 
         @Override

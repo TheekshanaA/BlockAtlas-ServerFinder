@@ -26,9 +26,9 @@ public class BlockAtlasInit{
             client.world.disconnect(Text.translatable("menu.disconnect"));
 
         if (bl)
-            client.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")), false);
+            client.disconnect(Text.translatable("menu.savingLevel"));
          else
-            client.disconnect(new MessageScreen(Text.translatable("menu.disconnect")), false);
+            client.disconnect(Text.translatable("menu.disconnect"));
 
 
         TitleScreen titleScreen = new TitleScreen();

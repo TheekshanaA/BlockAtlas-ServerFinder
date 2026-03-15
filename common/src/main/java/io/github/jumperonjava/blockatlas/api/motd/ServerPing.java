@@ -36,7 +36,7 @@ public class ServerPing{
         ping.server = serverinfo;
         PING_POOL.submit(() -> {
             try {
-                ping.pinger.add(serverinfo, ping::save, () -> {});
+                ping.pinger.add(serverinfo, ping::save, () -> {}, net.minecraft.network.NetworkingBackend.remote(false));
                 new Timer().schedule(new TimerTask() {
                     public void run() {
                         ping.pinger.cancel();

@@ -18,7 +18,9 @@
       "Bash(rm -rf .gradle/loom-cache)",
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-17.0.1\" ./gradlew clean build)",
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./gradlew wrapper --gradle-version 8.12)",
-      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./gradlew :common:compileJava)"
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./gradlew :common:compileJava)",
+      "Bash(python3 -c \":*)",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./gradlew :common:compileJava -Xdiags:verbose)"
     ]
   }
 }

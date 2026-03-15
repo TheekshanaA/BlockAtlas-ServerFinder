@@ -214,7 +214,7 @@ public class ServerScreen extends Screen {
                 var ref = new Object() {
                     long lastClickTime = 1000L;
                 };
-                e.addDrawableChild(new NonTexturedButton(0, -10, SERVER_LIST_SIZE + 20, 500, Text.empty(), (b) -> {
+                e.addDrawableChild(NonTexturedButton.create(0, -10, SERVER_LIST_SIZE + 20, 500, Text.empty(), (b) -> {
                     e.setMeActive();
                     selectedServer = server;
                     activateButtons.run();
