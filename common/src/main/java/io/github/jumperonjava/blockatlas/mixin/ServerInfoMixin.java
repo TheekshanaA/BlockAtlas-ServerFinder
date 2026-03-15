@@ -29,12 +29,12 @@ public class ServerInfoMixin implements ServerInfoExt {
 
     @Inject(method = "fromNbt",at = @At(value = "INVOKE",target = "Lnet/minecraft/nbt/NbtCompound;contains(Ljava/lang/String;I)Z",ordinal = 0,shift = At.Shift.AFTER),locals = LocalCapture.CAPTURE_FAILHARD)
     private static void fromNbtParseVoteUrl(NbtCompound root, CallbackInfoReturnable<ServerInfo> cir, ServerInfo serverInfo){
-        if(root.contains(VOTELINK_TAG)){
-            ((ServerInfoMixin)(Object)serverInfo).votelink=root.getString(VOTELINK_TAG);
-        }
-        if(root.contains(POSTREQUESTCALL_TAG)){
-            ((ServerInfoMixin)(Object)serverInfo).postRequestCall=root.getString(POSTREQUESTCALL_TAG);
-        }
+        root.getString(VOTELINK_TAG).ifPresent(val -> {
+            ((ServerInfoMixin)(Object)serverInfo).votelink = val;
+        });
+        root.getString(POSTREQUESTCALL_TAG).ifPresent(val -> {
+            ((ServerInfoMixin)(Object)serverInfo).postRequestCall = val;
+        });
     }
     @Inject(method = "copyFrom",at = @At("HEAD"))
     private void copyVoteUrl(ServerInfo serverInfo, CallbackInfo ci){

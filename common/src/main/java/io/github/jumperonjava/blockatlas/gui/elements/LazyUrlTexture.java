@@ -36,9 +36,9 @@ public class LazyUrlTexture implements Supplier<Identifier> {
 
                 NativeImage nativeImage = NativeImage.read(inputStream);
                 inputStream.close();
-                RenderSystem.recordRenderCall(() -> {
+                MinecraftClient.getInstance().execute(() -> {
                     try {
-                        var backedTestTexture = new NativeImageBackedTexture(nativeImage);
+                        var backedTestTexture = new NativeImageBackedTexture(() -> "blockatlas_icon", nativeImage);
                         MinecraftClient.getInstance().getTextureManager().registerTexture(id, backedTestTexture);
                         DOWNLOADED.put(iconUrl, id);
                     } catch (Exception e) {

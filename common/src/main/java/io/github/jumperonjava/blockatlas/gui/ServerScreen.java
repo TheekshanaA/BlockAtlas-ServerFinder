@@ -1,6 +1,5 @@
 package io.github.jumperonjava.blockatlas.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.jumperonjava.blockatlas.BlockAtlasInit;
 import io.github.jumperonjava.blockatlas.api.ListHandler;
 import io.github.jumperonjava.blockatlas.api.Server;
@@ -8,6 +7,7 @@ import io.github.jumperonjava.blockatlas.api.ServerApi;
 import io.github.jumperonjava.blockatlas.api.Tag;
 import io.github.jumperonjava.blockatlas.gui.elements.*;
 import io.github.jumperonjava.blockatlas.util.ServerInfoExt;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -184,7 +184,7 @@ public class ServerScreen extends Screen {
     }
     public void updateServerList(){
         var iconsize = smallmode?32:48;
-        RenderSystem.recordRenderCall(()->{
+        MinecraftClient.getInstance().execute(()->{
             serverListWidget.children().clear();
             var isLastNull = false;
             for (Server server : new ArrayList<>(serverList)) {
