@@ -12,14 +12,15 @@ import net.minecraft.text.TextColor;
 import java.io.File;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PingWithCache {
     public static final Text FAILED_TEXT = Text.translatable("blockatlas.motdfail").setStyle(Style.EMPTY.withColor(TextColor.parse("red")));
     public static final Text LOADING_TEXT = Text.translatable("Loading description...");
-    private static Set<String> requiredUpdate = new HashSet<>();
-    private static Map<String, ServerInfo> motdCache = new HashMap<>();
-    public static final Set<String> failed = new HashSet<>();
-    public static final Map<String, Long> getting = new HashMap<>();
+    private static Set<String> requiredUpdate = ConcurrentHashMap.newKeySet();
+    private static Map<String, ServerInfo> motdCache = new ConcurrentHashMap<>();
+    public static final Set<String> failed = ConcurrentHashMap.newKeySet();
+    public static final Map<String, Long> getting = new ConcurrentHashMap<>();
 
     private static File getCacheDirectory() {
         return MinecraftClient.getInstance().getResourcePackDir().resolve("../config").resolve("blockatlas/motdcache.json").toFile();
@@ -30,8 +31,8 @@ public class PingWithCache {
             motdCache = Json.GSON.fromJson(FileReadWrite.read(getCacheDirectory()), new TypeToken<Map<String, ServerInfo>>() {
             }.getType());
             if (motdCache == null)
-                motdCache = new HashMap<>();
-            motdCache = new HashMap<>(motdCache);
+                motdCache = new ConcurrentHashMap<>();
+            motdCache = new ConcurrentHashMap<>(motdCache);
             motdCache.forEach((s, serverInfo) -> requiredUpdate.add(s));
         } catch (Exception e) {
             e.printStackTrace();
