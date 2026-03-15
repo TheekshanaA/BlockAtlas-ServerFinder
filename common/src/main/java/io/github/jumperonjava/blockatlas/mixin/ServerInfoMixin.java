@@ -41,7 +41,7 @@ public class ServerInfoMixin implements ServerInfoExt {
         if(serverInfo.address.equals(this.address))
         {
             this.votelink = ((ServerInfoMixin)(Object)serverInfo).votelink;
-            this.postRequestCall = ((ServerInfoMixin) (Object) serverInfo).votelink;
+            this.postRequestCall = ((ServerInfoMixin) (Object) serverInfo).postRequestCall;
         }
     }
     public void setVoteLink(String s) {

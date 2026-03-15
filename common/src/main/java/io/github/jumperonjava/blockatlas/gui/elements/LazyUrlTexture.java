@@ -10,13 +10,14 @@ import net.minecraft.util.Identifier;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 
 public class LazyUrlTexture implements Supplier<Identifier> {
-    private static final Map<String, Identifier> DOWNLOADED = new HashMap<>();
-    private static final Set<String> DOWNLOADING = new HashSet<>();
+    private static final Map<String, Identifier> DOWNLOADED = new ConcurrentHashMap<>();
+    private static final Set<String> DOWNLOADING = ConcurrentHashMap.newKeySet();
     private static final Identifier NOT_DOWNLOADED = Identifier.of("blockatlas","textures/pack.png");
     private final String iconUrl;
     private static ThreadPoolExecutor LAZY_DOWNLOAD_ASYNC = new ScheduledThreadPoolExecutor(4, (new ThreadFactoryBuilder()).setNameFormat("Icon download pool #%d").setDaemon(true).build());;

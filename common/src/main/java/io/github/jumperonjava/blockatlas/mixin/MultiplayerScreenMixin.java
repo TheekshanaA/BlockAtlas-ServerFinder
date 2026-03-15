@@ -44,8 +44,10 @@ public abstract class MultiplayerScreenMixin extends Screen {
     public void disconnectFromServer(ServerInfo entry, CallbackInfo ci){
         String preq = ((ServerInfoExt)entry).getPostReq();
         if(preq!=null){
-            String argument = preq.split("&", 3)[2];
-            BlockAtlasServer.sendPostRequest(argument);
+            String[] parts = preq.split("&", 3);
+            if (parts.length >= 3) {
+                BlockAtlasServer.sendPostRequest(parts[2]);
+            }
         }
         this.parent = new TitleScreen();
         BlockAtlasInit.disconnect();
