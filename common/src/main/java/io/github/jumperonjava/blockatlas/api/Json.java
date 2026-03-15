@@ -33,11 +33,13 @@ public class Json {
                 is.close();
             } catch (IOException e) {
                 onFail.run();
+                return;
             }
             if(json == null)
             {
                 new RuntimeException("No Json Response").printStackTrace();
                 onFail.run();
+                return;
             }
             if(Objects.equals(json, ""))
             {
