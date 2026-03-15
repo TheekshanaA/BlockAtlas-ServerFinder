@@ -9,5 +9,5 @@ pluginManagement {
 
 include("common")
 include("fabric")
-include("forge")
+//include("forge") // disabled: Forge remapping fails with Loom 1.11 for this MC version
 //include("neoforge") // disabled: Yarn mappings have unfixable conflicts with NeoForge remapping
